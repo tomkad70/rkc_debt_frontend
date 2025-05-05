@@ -1,0 +1,73 @@
+|   .gitignore
+|   components.json
+|   folder-structure.txt
+|   index.html
+|   jsconfig.json
+|   package-lock.json
+|   package.json
+|   README.md
+|   src.zip
+|   tailwind.config.js
+|   vite.config.js
+|
+\---src
+    |   api.js
+    |   App.vue
+    |   main.js
+    |   
+    +---assets
+    |       main.css
+    |       vue.svg
+    |       
+    +---components
+    |   |   AppLoader.vue
+    |   |   CreateUserModal.vue
+    |   |   EditApplicationModal.vue
+    |   |   LogModal.vue
+    |   |   prev_EditApplicationModal.vue
+    |   |   ResetPasswordModal.vue
+    |   |   RoleModal.vue
+    |   |   UserPermissionsModal.vue
+    |   |   
+    |   +---application
+    |   |   |   EditApplicationModal.vue
+    |   |   |   index.js
+    |   |   |   
+    |   |   \---sections
+    |   |           ApplicationServicesSection.vue
+    |   |           ApplicationStepsSection.vue
+    |   |           CourtInfoSection.vue
+    |   |           DebtorInfoSection.vue
+    |   |           DocumentsSection.vue
+    |   |           FinancialInfoSection.vue
+    |   |           GeneralInfoSection.vue
+    |   |           
+    |   +---common
+    |   |       BaseModal.vue
+    |   |       FormItem.vue
+    |   |       FormSection.vue
+    |   |       index.js
+    |
+    |               
+    +---composables
+    |   \---application
+    |           index.js
+    |           useApplicationForm.js
+    |           useOrganizationsAndUsers.js
+    |           
+    +---lib
+    |       utils.js
+    |       
+    +---pages
+    |       AdminContracts.vue
+    |       AdminOrganizations.vue
+    |       AdminRegistries.vue
+    |       AdminUserList.vue
+    |       AppLayout.vue
+    |       ApplicationsList.vue
+    |       Dashboard.vue
+    |       LoginPage.vue
+    |       
+    \---router
+            index.js
+            
