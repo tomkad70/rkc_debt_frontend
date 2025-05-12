@@ -3,7 +3,6 @@
     <div class="flex flex-col space-y-4">
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-medium text-gray-800">Фильтры</h2>
-
         <button
             v-if="isAdmin"
             @click="$emit('create-new')"
@@ -17,24 +16,21 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <!-- Payment status tag -->
-        <div
-            v-if="localFilters.payment_status"
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
-            :class="{
-              'bg-green-100 text-green-800': localFilters.payment_status === 'paid',
-              'bg-red-100 text-red-800': localFilters.payment_status === 'unpaid'
-            }"
-        >
-          {{ localFilters.payment_status === 'paid' ? '✅ Оплачено' : '❌ Не оплачено' }}
-          <button @click.prevent="clearFilter('payment_status')" type="button"
-                  :class="{
-                    'ml-1 hover:text-green-600 cursor-pointer': localFilters.payment_status === 'paid',
-                    'ml-1 hover:text-red-600 cursor-pointer': localFilters.payment_status === 'unpaid'
-                  }">✕
-          </button>
+        <!-- Добавляем фильтр по оплате -->
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="text-gray-500">📁</span>
+          </div>
+          <select
+              v-model="localFilters.payment_status"
+              @change="applyFilters"
+              class="pl-10 block w-full rounded-lg border border-gray-300 py-2.5 focus:border-blue-500 focus:ring-blue-500 focus:outline-none cursor-pointer"
+          >
+            <option value="">Статус оплаты</option>
+            <option value="paid">Оплаченные</option>
+            <option value="unpaid">Неоплаченные</option>
+          </select>
         </div>
-
 
         <!-- Registry filter -->
         <div class="relative">
@@ -93,6 +89,15 @@
       <!-- Active filters -->
       <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 pt-2">
         <div class="text-sm text-gray-500 self-center">Активные фильтры:</div>
+
+        <div
+            v-if="localFilters.payment_status"
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+        >
+          {{ getStatusPayment(localFilters.payment_status) }}
+          <button @click="clearFilter('payment_status')" type="button" class="ml-1 hover:text-blue-600 cursor-pointer">✕
+          </button>
+        </div>
 
         <div
             v-if="localFilters.registry_id"
@@ -169,6 +174,11 @@ const props = defineProps({
     default: false
   }
 })
+
+const paymentOptions = [
+  { value: 'paid',   label: 'Оплаченные' },
+  { value: 'unpaid', label: 'Неоплаченные' }
+]
 
 const emit = defineEmits(['update:filters', 'apply-filters', 'create-new'])
 
@@ -253,4 +263,9 @@ const getUserName = (userId) => {
   const user = props.users.find(u => String(u.id) === String(userId))
   return user ? user.name : '—'
 }
+const getStatusPayment = (value) => {
+  const option = paymentOptions.find(o => o.value === value)
+  return option ? option.label : ''
+}
+
 </script>

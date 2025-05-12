@@ -10,12 +10,12 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'https://rampantly-commanding-poodle.cloudpub.ru/',
+                target: 'https://rkc-api.barkovskii.ru/',
                 changeOrigin: true,
-                secure: false
+                secure: true
             }
         },
-        allowedHosts:['quaintly-luxuriant-sambar.cloudpub.ru','rampantly-commanding-poodle.cloudpub.ru']
+        allowedHosts:['rkc.barkovskii.ru','rkc-api.barkovskii.ru']
     },
     resolve: {
         alias: {

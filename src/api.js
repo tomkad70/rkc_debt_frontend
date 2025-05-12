@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL: 'https://rampantly-commanding-poodle.cloudpub.ru/api',
+    baseURL: 'https://rkc-api.barkovskii.ru/api',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

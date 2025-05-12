@@ -23,7 +23,6 @@
           </span>
         </div>
         <div class="text-sm text-gray-500">👨 <span class="text-gray-900">{{ app.lawyer || '—' }}</span></div>
-        <div class="text-sm text-gray-500">💰 <span class="text-gray-900">0 руб.</span></div>
         <div class="mt-2 text-center">
           <button
               @click.stop="$emit('edit', app)"
@@ -71,17 +70,12 @@
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             <div class="flex items-center gap-1">
-              <span>📌</span> Тип заявки
+              <span>📌</span> Статус заявки
             </div>
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             <div class="flex items-center gap-1">
               <span>👨</span> Юрист
-            </div>
-          </th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <div class="flex items-center gap-1">
-              <span>💰</span> Расчёт
             </div>
           </th>
           <!-- Fixed action column -->
