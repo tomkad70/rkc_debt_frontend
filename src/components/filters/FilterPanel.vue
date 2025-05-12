@@ -17,6 +17,25 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <!-- Payment status tag -->
+        <div
+            v-if="localFilters.payment_status"
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
+            :class="{
+              'bg-green-100 text-green-800': localFilters.payment_status === 'paid',
+              'bg-red-100 text-red-800': localFilters.payment_status === 'unpaid'
+            }"
+        >
+          {{ localFilters.payment_status === 'paid' ? '✅ Оплачено' : '❌ Не оплачено' }}
+          <button @click.prevent="clearFilter('payment_status')" type="button"
+                  :class="{
+                    'ml-1 hover:text-green-600 cursor-pointer': localFilters.payment_status === 'paid',
+                    'ml-1 hover:text-red-600 cursor-pointer': localFilters.payment_status === 'unpaid'
+                  }">✕
+          </button>
+        </div>
+
+
         <!-- Registry filter -->
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -158,7 +177,8 @@ const localFilters = reactive({
   registry_id: props.filters.registry_id || '',
   organization_id: props.filters.organization_id || '',
   statuses: props.filters.statuses || [],
-  user_id: props.filters.user_id || ''
+  user_id: props.filters.user_id || '',
+  payment_status: props.filters.payment_status || ''
 })
 
 // Synchronize local filters with props
@@ -167,6 +187,7 @@ watch(() => props.filters, (newFilters) => {
   localFilters.organization_id = newFilters.organization_id || ''
   localFilters.statuses = newFilters.statuses || []
   localFilters.user_id = newFilters.user_id || ''
+  localFilters.payment_status = newFilters.payment_status || ''
 }, {deep: true})
 
 // Computed properties
@@ -174,7 +195,8 @@ const hasActiveFilters = computed(() => {
   return localFilters.registry_id !== '' ||
       localFilters.organization_id !== '' ||
       (localFilters.statuses && localFilters.statuses.length > 0) ||
-      localFilters.user_id !== ''
+      localFilters.user_id !== '' ||
+      localFilters.payment_status !== ''
 })
 
 const lawyerUsers = computed(() => {
@@ -212,6 +234,7 @@ const resetFilters = () => {
   localFilters.organization_id = ''
   localFilters.statuses = []
   localFilters.user_id = ''
+  localFilters.payment_status = ''
   applyFilters()
 }
 

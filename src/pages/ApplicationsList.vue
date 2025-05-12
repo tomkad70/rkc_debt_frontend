@@ -1,6 +1,6 @@
 <template>
   <AppLayout title="Заявки" :loading="loading">
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-full mx-auto">
       <!-- Header with stats -->
       <ApplicationsHeader
           :total-applications="totalApplications"
@@ -80,7 +80,8 @@ const filters = ref({
   registry_id: '',
   organization_id: '',
   statuses: [],
-  user_id: ''
+  user_id: '',
+  payment_status: ''
 })
 
 // Вычисляемые свойства
@@ -88,7 +89,8 @@ const hasActiveFilters = computed(() => {
   return filters.value.registry_id !== '' ||
       filters.value.organization_id !== '' ||
       filters.value.statuses.length > 0 ||
-      filters.value.user_id !== ''
+      filters.value.user_id !== '' ||
+      filters.value.payment_status !== ''
 })
 
 const lawyerUsers = computed(() => {
@@ -129,6 +131,14 @@ const loadApplications = async () => {
       status: filters.value.statuses,
       user_id: filters.value.user_id
     }
+
+    // Добавляем фильтр по статусу оплаты, если он выбран
+    if (filters.value.payment_status === 'paid') {
+      paramsObject.is_fully_paid = true
+    } else if (filters.value.payment_status === 'unpaid') {
+      paramsObject.is_fully_paid = false
+    }
+
     // Собираем строку запроса: 'registry_id=…&status[]=новая&status[]=…'
     const qs = buildQueryParams(paramsObject)
 
@@ -200,6 +210,7 @@ const openEdit = async (app) => {
     // Инициализируем пустые массивы для услуг и этапов, если их нет
     if (!fullApplication.services) fullApplication.services = [];
     if (!fullApplication.steps) fullApplication.steps = [];
+    if (!fullApplication.payment_documents) fullApplication.payment_documents = [];
 
     selected.value = fullApplication;
   } catch (error) {
@@ -220,7 +231,9 @@ const createNew = () => {
     user_id: role === 'lawyer' ? userId : null,
     // Пустые массивы для этапов и услуг
     steps: [],
-    services: []
+    services: [],
+    payment_documents: [],
+    is_fully_paid: false
   }
 }
 

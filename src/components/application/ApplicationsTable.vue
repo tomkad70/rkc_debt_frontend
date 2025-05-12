@@ -7,11 +7,15 @@
           :key="app.id"
           class="p-4"
       >
-        <div class="text-sm text-gray-500">📅 <span class="font-medium text-gray-900">{{ formatDate(app.application_date) }}</span></div>
+
+        <div class="text-sm text-gray-500">📅 <span class="font-medium text-gray-900">{{
+            formatDate(app.application_date)
+          }}</span></div>
         <div class="text-sm text-gray-500">🏢 <span class="text-gray-900">{{ app.organization }}</span></div>
         <div class="text-sm text-gray-500">👨 <span class="text-gray-900">{{ app.debtor_address }}</span></div>
         <div class="text-sm text-gray-500">📂 <span class="text-gray-900">{{ app.action_type }}</span></div>
-        <div class="text-sm text-gray-500">📁 <span class="text-gray-900">{{ app.registry_number ? `📁 №${app.registry_number}` : '—' }}</span></div>
+        <div class="text-sm text-gray-500">📁 <span
+            class="text-gray-900">{{ app.registry_number ? `📁 №${app.registry_number}` : '—' }}</span></div>
         <div class="text-sm text-gray-500">📌
           <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                 :class="getStatusBadgeClass(app.status)">
@@ -90,7 +94,9 @@
         <tr
             v-for="app in applications"
             :key="app.id"
-            class="hover:bg-gray-50 transition-colors cursor-pointer"
+            :class="['transition-colors cursor-pointer',    {
+                   'bg-green-100 hover:bg-green-200': app.is_fully_paid,
+                   'hover:bg-gray-50': !app.is_fully_paid    }  ]"
             @dblclick="$emit('edit', app)"
         >
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{{ app.id }}</td>
@@ -152,7 +158,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import {computed} from 'vue'
 
 const props = defineProps({
   applications: {
