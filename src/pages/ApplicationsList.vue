@@ -24,6 +24,7 @@
           :loading="loading"
           :has-active-filters="hasActiveFilters"
           @edit="openEdit"
+          @edit-schad="openEdit2"
       />
     </div>
 
@@ -46,6 +47,15 @@
         @close="selected = null"
         @updated="loadApplications"
     />
+
+    <EditApplicationModalSchad
+        v-if="selected_schad && !selectedLoading"
+        :application="selected_schad"
+        @close="selected_schad = null"
+        @updated="loadApplications"
+    />
+
+
   </AppLayout>
 </template>
 
@@ -53,7 +63,7 @@
 import {ref, onMounted, computed} from 'vue'
 import api from '@/api'
 import AppLayout from '@/pages/AppLayout.vue'
-import {ApplicationsHeader, ApplicationsTable,EditApplicationModal} from '@/components/application/index.js'
+import {ApplicationsHeader, ApplicationsTable, EditApplicationModal,EditApplicationModalSchad} from '@/components/application/index.js'
 import {FilterPanel} from '@/components/filters/index.js'
 import {buildQueryParams} from '@/utils/buildQuery'
 
@@ -64,12 +74,15 @@ const registries = ref([])
 const organizations = ref([])
 const users = ref([])
 
+
+
 // Состояния загрузки
 const loading = ref(true)
 const selectedLoading = ref(false)
 
 // Детальные данные заявки для редактирования
 const selected = ref(null)
+const selected_schad= ref(null)
 
 // Статистика для панели управления
 const totalApplications = ref(0)
@@ -213,11 +226,57 @@ const openEdit = async (app) => {
     if (!fullApplication.payment_documents) fullApplication.payment_documents = [];
 
     selected.value = fullApplication;
+
   } catch (error) {
     console.error('Failed to load application details:', error)
     alert('Не удалось загрузить данные заявки. Попробуйте еще раз.')
   } finally {
     selectedLoading.value = false
+
+  }
+}
+
+const openEdit2 = async (app) => {
+  try {
+    selectedLoading.value = true
+
+    // Загружаем полные данные заявки по ID
+    const response = await api.get(`/applications/${app.id}`)
+    const fullApplication = response.data.data || response.data
+
+    // Восстанавливаем ID организации, если его нет в данных API
+    if (fullApplication.organization && !fullApplication.organization_id) {
+      const matchingOrg = organizations.value.find(
+          org => org.name === fullApplication.organization
+      );
+      if (matchingOrg) {
+        fullApplication.organization_id = matchingOrg.id;
+      }
+    }
+
+    // Восстанавливаем ID юриста, если его нет в данных API
+    if (fullApplication.lawyer && !fullApplication.user_id) {
+      const matchingLawyer = users.value.find(
+          user => user.name === fullApplication.lawyer
+      );
+      if (matchingLawyer) {
+        fullApplication.user_id = matchingLawyer.id;
+      }
+    }
+
+    // Инициализируем пустые массивы для услуг и этапов, если их нет
+    if (!fullApplication.services) fullApplication.services = [];
+    if (!fullApplication.steps) fullApplication.steps = [];
+    if (!fullApplication.payment_documents) fullApplication.payment_documents = [];
+
+    selected_schad.value = fullApplication;
+
+  } catch (error) {
+    console.error('Failed to load application details:', error)
+    alert('Не удалось загрузить данные заявки. Попробуйте еще раз.')
+  } finally {
+    selectedLoading.value = false
+
   }
 }
 

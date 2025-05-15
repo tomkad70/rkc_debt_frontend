@@ -41,7 +41,7 @@
                   v-slot="{ navigate, isActive }"
               >
                 <span @click="smoothNavigate(navigate, '/applications')" class="flex items-center">
-                  <span class="mr-1.5">📂</span> Заявки
+                  Заявки
                 </span>
               </router-link>
 
@@ -54,7 +54,7 @@
                   v-slot="{ navigate, isActive }"
               >
                 <span @click="smoothNavigate(navigate, '/admin/users')" class="flex items-center">
-                  <span class="mr-1.5">👥</span> Пользователи
+                  Пользователи
                 </span>
               </router-link>
 
@@ -67,7 +67,7 @@
                   v-slot="{ navigate, isActive }"
               >
                 <span @click="smoothNavigate(navigate, '/admin/organizations')" class="flex items-center">
-                  <span class="mr-1.5">🏢</span> Организации
+                  Организации
                 </span>
               </router-link>
 
@@ -80,7 +80,20 @@
                   v-slot="{ navigate, isActive }"
               >
                 <span @click="smoothNavigate(navigate, '/admin/contracts')" class="flex items-center">
-                  <span class="mr-1.5">📜</span> Договора
+                  Договора
+                </span>
+              </router-link>
+
+              <router-link
+                  v-if="role === 'admin'"
+                  to="/admin/reports"
+                  class="nav-link flex items-center py-2 px-3 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out cursor-pointer"
+                  :class="isActive('/admin/reports') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'"
+                  active-class="active-nav-link"
+                  v-slot="{ navigate, isActive }"
+              >
+                <span @click="smoothNavigate(navigate, '/admin/contracts')" class="flex items-center">
+                  Отчёты
                 </span>
               </router-link>
             </div>

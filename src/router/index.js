@@ -29,6 +29,11 @@ const routes = [
         path: '/admin/contracts',
         component: () => import('../pages/AdminContracts.vue'),
         meta: { requiresAuth: true }
+    },
+    {
+        path: '/admin/reports',
+        component: () => import('../pages/AdminReports.vue'),
+        meta: { requiresAuth: true }
     }
 ]
 

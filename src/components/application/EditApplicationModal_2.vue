@@ -1,63 +1,59 @@
 <template>
-  <BaseModal
-      :title="formTitle"
-      :subtitle="formSubtitle"
-      icon="📝"
-      v-model="isOpen"
-      @close="$emit('close')"
-  >
+  <Dialog v-model:open="isOpen" modal class="w-0.5">
+    <DialogContent class="">
 
-    <!-- Содержимое формы в основном слоте -->
-    <form @submit.prevent="submit" class="space-y-6">
-      <!-- Общая информация -->
-      <GeneralInfoSection
-          :form="form"
-          :organizations="organizations"
-          :current-contract="currentContract"
-          :contracts="contracts"
-          :lawyers="lawyers"
-          :isAdmin="isAdmin"
-      />
+      <!-- Содержимое формы в основном слоте -->
+      <form @submit.prevent="submit" class="">
+        <!-- Общая информация -->
+        <GeneralInfoSection
+            :form="form"
+            :organizations="organizations"
+            :current-contract="currentContract"
+            :contracts="contracts"
+            :lawyers="lawyers"
+            :isAdmin="isAdmin"
+        />
 
-      <!-- Документы -->
-      <DocumentsSection :form="form"/>
+        <!-- Документы -->
+        <DocumentsSection :form="form"/>
 
-      <!-- Информация о должнике -->
-      <DebtorInfoSection :form="form"/>
+        <!-- Информация о должнике -->
+        <DebtorInfoSection :form="form"/>
 
-      <!-- Судебная информация -->
-      <CourtInfoSection :form="form"/>
+        <!-- Судебная информация -->
+        <CourtInfoSection :form="form"/>
 
-      <!-- Этапы заявки (улучшенная версия) -->
-      <ApplicationStepsSection :form="form"/>
+        <!-- Этапы заявки (улучшенная версия) -->
+        <ApplicationStepsSection :form="form"/>
 
-      <!-- Состав и стоимость услуг (улучшенная версия) -->
-      <ApplicationServicesSection
-          :form="form"
-          @update:totalCost="updateTotalCost"
-      />
+        <!-- Состав и стоимость услуг (улучшенная версия) -->
+        <ApplicationServicesSection
+            :form="form"
+            @update:totalCost="updateTotalCost"
+        />
 
-      <!-- Финансовая информация -->
-      <FinancialInfoSection
-          :form="form"
-          :calculatedTotalPrice="calculatedTotalPrice"
-      />
-    </form>
+        <!-- Финансовая информация -->
+        <FinancialInfoSection
+            :form="form"
+            :calculatedTotalPrice="calculatedTotalPrice"
+        />
+      </form>
+
+    </DialogContent>
+
 
     <!-- Слоты для футера должны быть на одном уровне с основным содержимым -->
-    <template #footer>
+    <DialogFooter class="">
       <div class="flex justify-end space-x-3">
         <Button
             @click.prevent="$emit('close')"
             variant="outline"
-            class="cursor-pointer"
         >
           Отмена
         </Button>
         <Button
             @click.prevent="submit"
-            variant="outline"
-            class="cursor-pointer"
+            variant="default"
         >
           <span class="flex items-center justify-center">
             <span class="mr-2">💾</span>
@@ -65,14 +61,13 @@
           </span>
         </Button>
       </div>
-    </template>
-
-  </BaseModal>
+    </DialogFooter>
+  </Dialog>
 </template>
 
 <script setup>
 import {ref, onMounted, watch, computed} from 'vue'
-import {BaseModal} from '../common/index.js'
+
 import {
   GeneralInfoSection,
   DocumentsSection,
@@ -82,6 +77,26 @@ import {
   ApplicationStepsSection,
   ApplicationServicesSection
 } from './index.js'
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 
 import {Button} from '@/components/ui/button'
 
@@ -111,7 +126,7 @@ const {form, submit, formTitle, formSubtitle, submitButtonText, normalizeIds} = 
 )
 
 // Загрузка данных организаций и пользователей
-const {organizations, lawyers,contracts, isAdmin, loadData} = useOrganizationsAndUsers(form)
+const {organizations, lawyers, contracts, isAdmin, loadData} = useOrganizationsAndUsers(form)
 
 
 const loadCurrentContract = () => {

@@ -1,123 +1,161 @@
 <template>
-  <div class="bg-white rounded-lg shadow-sm p-5 mb-6">
-    <div class="flex flex-col space-y-4">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-medium text-gray-800">Фильтры</h2>
-        <button
-            v-if="isAdmin"
-            @click="$emit('create-new')"
-            type="button"
-            class="bg-green-600 text-white px-4 py-2.5 rounded-lg hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 font-medium cursor-pointer"
-        >
-          <span class="flex items-center justify-center gap-2">
-            <span>➕</span> Создать заявку
-          </span>
-        </button>
-      </div>
+  <div class="flex flex-col space-y-2">
+    <div class="flex justify-between items-center">
+      <Button v-if="isAdmin"
+              variant="outline"
+              @click="$emit('create-new')"
+              class="cursor-pointer bg-white w-full md:w-fit border-0 shadow-sm ring-0 outline-none">
+        <PlusIcon color="green"/>
+        Создать заявку
+      </Button>
+    </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <!-- Добавляем фильтр по оплате -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="text-gray-500">📁</span>
+    <!-- Filters Grid -->
+    <Card class="border-0 mb-2 bg-white">
+      <CardHeader>
+        <CardTitle>
+          <div class="flex justify-start items-center">
+            <Funnel :size="15" color="" class="mr-2"/>
+            Фильтры
           </div>
-          <select
-              v-model="localFilters.payment_status"
-              @change="applyFilters"
-              class="pl-10 block w-full rounded-lg border border-gray-300 py-2.5 focus:border-blue-500 focus:ring-blue-500 focus:outline-none cursor-pointer"
+        </CardTitle>
+      </CardHeader>
+      <CardContent class="">
+        <div class="grid grid-cols-2 lg:grid-cols-12 gap-2 select-none ring-none outline-0">
+          <!-- Payment Status -->
+          <Select v-model="localFilters.payment_status"
+                  @update:model-value="applyFilters"
+                  class=""
           >
-            <option value="">Статус оплаты</option>
-            <option value="paid">Оплаченные</option>
-            <option value="unpaid">Неоплаченные</option>
-          </select>
+            <SelectTrigger class="cursor-pointer w-full border  border-slate-300 ring-0 outline-0 outline-none">
+              <SelectValue placeholder="Статус оплаты" class=""/>
+            </SelectTrigger>
+            <SelectContent class=" bg-white border border-slate-300">
+              <SelectItem value="paid" class="hover:bg-gray-300 cursor-pointer">
+                Оплачено
+              </SelectItem>
+              <SelectItem value="unpaid" class="hover:bg-gray-300 cursor-pointer">
+                Неоплачено
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <!-- Registry -->
+          <Select v-if="registries.length" v-model="localFilters.registry_id"
+                  @update:model-value="applyFilters">
+            <SelectTrigger class="cursor-pointer w-full border border-slate-300">
+              <SelectValue placeholder="Все реестры"/>
+            </SelectTrigger>
+            <SelectContent
+                class="bg-white border border-slate-300">
+              <SelectItem v-for="r in registries"
+                          :key="r.id"
+                          :value="r.id"
+                          class="hover:bg-gray-300 cursor-pointer">
+                <SelectItemText>
+                  №-{{ r.number }}
+                </SelectItemText>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <!-- Organization -->
+          <Select v-model="localFilters.organization_id"
+                  @update:model-value="applyFilters">
+            <SelectTrigger
+                class="cursor-pointer w-full border border-slate-300"
+            >
+              <SelectValue placeholder="Орг."/>
+            </SelectTrigger>
+            <SelectContent
+                class="bg-white border border-slate-300">
+              <SelectItem v-for="org in organizations"
+                          :key="org.id"
+                          :value="org.id"
+                          class=" hover:bg-gray-300 cursor-pointer">
+                <SelectItemText>
+                  {{ org.name }}
+                </SelectItemText>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <!-- Multi Status Select -->
+          <Select multiple v-model="localFilters.statuses"
+                  @update:model-value="applyFilters"
+                  class=""
+          >
+            <SelectTrigger class="cursor-pointer w-full border border-slate-300">
+              <SelectValue placeholder="Статус заявки"/>
+            </SelectTrigger>
+            <SelectContent class=" bg-white border border-slate-300">
+              <SelectItem v-for="s in statusOptions" :key="s.label" :value="s.value"
+                          class="hover:bg-gray-100 cursor-pointer">
+                <SelectItemText>
+                  {{ s.label }}
+                </SelectItemText>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <!-- Lawyer User -->
+          <Select v-if="lawyerUsers.length" v-model="localFilters.user_id"
+                  @update:model-value="applyFilters">
+            <SelectTrigger
+                class="cursor-pointer w-full border border-slate-300"
+            >
+              <SelectValue placeholder="Юристы"/>
+            </SelectTrigger>
+            <SelectContent
+                class="bg-white border border-slate-300">
+              <SelectItem v-for="u in lawyerUsers" :key="u.id" :value="u.id" class="hover:bg-gray-300 cursor-pointer">
+                <SelectItemText>
+                  {{ u.name }}
+                </SelectItemText>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <!-- Registry filter -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="text-gray-500">📁</span>
-          </div>
-          <select
-              v-model="localFilters.registry_id"
-              @change="applyFilters"
-              class="pl-10 block w-full rounded-lg border border-gray-300 py-2.5 focus:border-blue-500 focus:ring-blue-500 focus:outline-none cursor-pointer"
-          >
-            <option value="">Все реестры</option>
-            <option v-for="r in registries" :key="r.id" :value="r.id">№-{{ r.number }}</option>
-          </select>
-        </div>
-
-        <!-- Organization filter -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="text-gray-500">🏢</span>
-          </div>
-          <select
-              v-model="localFilters.organization_id"
-              @change="applyFilters"
-              class="pl-10 block w-full rounded-lg border border-gray-300 py-2.5 focus:border-blue-500 focus:ring-blue-500 focus:outline-none cursor-pointer"
-          >
-            <option value="">Все организации</option>
-            <option v-for="org in organizations" :key="org.id" :value="org.id">{{ org.name }}</option>
-          </select>
-        </div>
-
-        <!-- Status filter - replaced with multi-select -->
-        <StatusMultiSelect
-            :options="statusOptions"
-            v-model="localFilters.statuses"
-            placeholder="Выберите статус(ы)"
-            @update:modelValue="applyFilters"
-        />
-
-        <!-- User filter -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="text-gray-500">👨‍⚖</span>
-          </div>
-          <select
-              v-model="localFilters.user_id"
-              @change="applyFilters"
-              class="pl-10 block w-full rounded-lg border border-gray-300 py-2.5 focus:border-blue-500 focus:ring-blue-500 focus:outline-none cursor-pointer"
-          >
-            <option value="">Все юристы</option>
-            <option v-for="u in lawyerUsers" :key="u.id" :value="u.id">{{ u.name }}</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Active filters -->
-      <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 pt-2">
-        <div class="text-sm text-gray-500 self-center">Активные фильтры:</div>
-
-        <div
-            v-if="localFilters.payment_status"
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-        >
+      </CardContent>
+    </Card>
+    <!-- Active filters -->
+    <!--    <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 pt-2">-->
+    <Card v-if="hasActiveFilters" class="border-0 mb-2 bg-white">
+      <CardHeader class="h-2">
+        <CardTitle class="h-2">
+          Активные фильтры:
+        </CardTitle>
+      </CardHeader>
+      <CardContent class="text-sm grid gap-2 grid-cols-1 place-items-center md:place-items-start ">
+        <Badge v-if="localFilters.payment_status" class="border-0 text-fuchsia-800 bg-fuchsia-100 h-6 " variant="">
           {{ getStatusPayment(localFilters.payment_status) }}
-          <button @click="clearFilter('payment_status')" type="button" class="ml-1 hover:text-blue-600 cursor-pointer">✕
-          </button>
-        </div>
+          <Button size="icon"
+                  @click="clearFilter('payment_status')"
+                  class="cursor-pointer shadow-none w-2">
+            <SquareX class="text-red-500"/>
+          </Button>
+        </Badge>
 
-        <div
-            v-if="localFilters.registry_id"
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-        >
+        <Badge v-if="localFilters.registry_id" class="border-0 text-blue-800 h-6 " variant="outline">
           Реестр: №{{ getRegistryNumber(localFilters.registry_id) }}
-          <button @click="clearFilter('registry_id')" type="button" class="ml-1 hover:text-blue-600 cursor-pointer">✕
-          </button>
-        </div>
+          <Button size="icon" @click="clearFilter('registry_id')" class="cursor-pointer shadow-none w-2">
+            <SquareX class="text-red-500"/>
+          </Button>
+        </Badge>
 
-        <div
-            v-if="localFilters.organization_id"
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
-        >
+        <Badge v-if="localFilters.organization_id" class="border-0 text-indigo-800 bg-indigo-100 h-6 " variant="outline">
           Организация: {{ getOrganizationName(localFilters.organization_id) }}
-          <button @click="clearFilter('organization_id')" type="button"
-                  class="ml-1 hover:text-indigo-600 cursor-pointer">✕
-          </button>
-        </div>
+          <Button size="icon" @click="clearFilter('organization_id')" class="cursor-pointer shadow-none w-2">
+            <SquareX class="text-red-500"/>
+          </Button>
+        </Badge>
 
+        <Badge v-if="localFilters.user_id" class="border-0 text-cyan-800 h-6 bg-cyan-100" variant="outline">Юрист:
+          {{ getUserName(localFilters.user_id) }}
+          <Button size="icon" @click="clearFilter('user_id')" class="cursor-pointer shadow-none w-2">
+            <SquareX class="text-red-500"/>
+          </Button>
+        </Badge>
         <!-- Status tags list -->
         <StatusTagsList
             v-if="localFilters.statuses && localFilters.statuses.length > 0"
@@ -127,15 +165,9 @@
             @removeAll="clearFilter('statuses')"
         />
 
-        <div
-            v-if="localFilters.user_id"
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
-        >
-          Юрист: {{ getUserName(localFilters.user_id) }}
-          <button @click="clearFilter('user_id')" type="button" class="ml-1 hover:text-yellow-600 cursor-pointer">✕
-          </button>
-        </div>
 
+      </CardContent>
+      <CardFooter>
         <button
             @click="resetFilters"
             type="button"
@@ -143,14 +175,33 @@
         >
           Сбросить все
         </button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   </div>
+
+
 </template>
 
 <script setup>
 import {computed, reactive, watch} from 'vue'
 import {StatusMultiSelect, StatusTagsList} from './index.js'
+import {PlusIcon, Funnel, SquareX} from 'lucide-vue-next'
+
+import {
+  Select,
+  SelectItem,
+  SelectItemText,
+  SelectSeparator,
+  SelectLabel,
+  SelectContent,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger
+} from "@/components/ui/select/index.js";
+
+import {Card, CardTitle, CardHeader, CardContent, CardFooter} from "@/components/ui/card/index.js"
+import {Badge} from "@/components/ui/badge/index.js"
+import {Button} from "@/components/ui/button/index.js"
 
 const props = defineProps({
   filters: {
@@ -176,8 +227,8 @@ const props = defineProps({
 })
 
 const paymentOptions = [
-  { value: 'paid',   label: 'Оплаченные' },
-  { value: 'unpaid', label: 'Неоплаченные' }
+  {value: 'paid', label: 'Оплаченные'},
+  {value: 'unpaid', label: 'Неоплаченные'}
 ]
 
 const emit = defineEmits(['update:filters', 'apply-filters', 'create-new'])
@@ -214,13 +265,14 @@ const lawyerUsers = computed(() => {
 })
 
 const statusOptions = computed(() => [
-  {value: 'новая', label: '🆕 Новая'},
-  {value: 'в работе', label: '⚙️ В работе'},
-  {value: 'закрыта', label: '✅ Закрыта'}
+  {value: 'новая', label: 'Новая'},
+  {value: 'в работе', label: 'В работе'},
+  {value: 'закрыта', label: 'Закрыта'}
 ])
 
 // Methods
 const applyFilters = () => {
+  console.log('localFilters')
   emit('update:filters', {...localFilters})
   emit('apply-filters')
 }

@@ -9,7 +9,7 @@
             <p class="text-gray-500 mt-1">Управление учетными записями и правами доступа</p>
           </div>
           <div class="mt-4 sm:mt-0 flex items-center">
-            <div class="bg-blue-50 rounded-lg p-3">
+            <div class="bg-blue-50 rounded-lg p-3 text-center w-full">
               <div class="font-medium text-sm text-blue-800">Всего пользователей</div>
               <div class="text-2xl font-bold text-blue-600">{{ users.length }}</div>
             </div>
@@ -77,7 +77,6 @@
                       @click="openRoleModal(user)"
                       class="cursor-pointer text-indigo-600 hover:text-indigo-900 p-1.5 hover:bg-gray-200 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >🛠️</button>
-                  <button-rkc variant="outline" size="icon">1</button-rkc>
                   <button
                       title="Сбросить пароль"
                       @click="openResetModal(user)"
@@ -156,7 +155,6 @@ import RoleModal from '../components/RoleModal.vue'
 import ResetPasswordModal from '../components/ResetPasswordModal.vue'
 import LogModal from '../components/LogModal.vue'
 import UserPermissionsModal from "@/components/UserPermissionsModal.vue";
-import ButtonRkc from "@/components/ui/button/ButtonRkc.vue";
 
 const router = useRouter()
 const users = ref([])

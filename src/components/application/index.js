@@ -1,5 +1,6 @@
 // Основной компонент редактирования заявок
 export {default as EditApplicationModal} from './EditApplicationModal.vue'
+export {default as EditApplicationModalSchad} from './EditApplicationModal_2.vue'
 
 // Секции формы заявки
 export {default as GeneralInfoSection} from './sections/GeneralInfoSection.vue'

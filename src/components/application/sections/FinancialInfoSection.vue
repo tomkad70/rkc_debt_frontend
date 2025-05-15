@@ -61,12 +61,15 @@
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white"
               :class="(isNewDocumentValid && !isSaving) ? 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200' : 'bg-gray-300 cursor-not-allowed'"
           >
-            <svg v-if="isSaving" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg v-if="isSaving" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
             {{ isSaving ? 'Сохранение...' : 'Добавить платёжку' }}
           </button>
@@ -90,7 +93,8 @@
               <td colspan="4" class="px-6 py-8 text-center">
                 <div class="text-gray-500">
                   <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 4.99h.01M19 9l-7 7-5.5 5.5H5z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 14l6-6m-5.5.5h.01m4.99 4.99h.01M19 9l-7 7-5.5 5.5H5z"></path>
                   </svg>
                   <p class="mt-2 text-sm">Нет платежных документов</p>
                 </div>
@@ -177,7 +181,8 @@
                         title="Отменить"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"></path>
                       </svg>
                     </button>
                   </template>
@@ -191,7 +196,8 @@
                         title="Редактировать"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                       </svg>
                     </button>
                     <button
@@ -202,7 +208,8 @@
                         title="Удалить"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                       </svg>
                     </button>
                   </template>
@@ -225,19 +232,20 @@
         </div>
 
         <!-- Статус оплаты -->
-        <div class="mt-4">
-          <FormItem label="" isCheckbox>
-            <template #checkbox>
-              <input
-                  type="checkbox"
-                  v-model="form.is_fully_paid"
-                  class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 mr-2 cursor-pointer"
-              />
-            </template>
-            <span :class="{ 'text-green-600 font-medium': form.is_fully_paid }">
-              {{ form.is_fully_paid ? '✅ Заявка оплачена полностью' : 'Заявка оплачена полностью' }}
-            </span>
-          </FormItem>
+
+        <div class="mt-4 flex items-center">
+          <button
+              type="button"
+              @click="form.is_fully_paid = !form.is_fully_paid"
+              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              :class="form.is_fully_paid ? 'bg-blue-600' : 'bg-gray-200'"
+          >
+            <span
+                class="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                :class="form.is_fully_paid ? 'translate-x-5' : 'translate-x-0'"/>
+          </button>
+          <span class="ml-2"
+                :class="{ 'text-green-600 font-medium': form.is_fully_paid }">Заявка оплачена полностью</span>
         </div>
       </div>
     </template>
@@ -256,8 +264,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { FormSection, FormItem } from '@/components/common/index.js'
+import {ref, computed, watch, onMounted} from 'vue'
+import {FormSection, FormItem} from '@/components/common/index.js'
 import api from "@/../src/api.js";
 
 const props = defineProps({
@@ -363,7 +371,7 @@ const startEdit = (id) => {
   const doc = paymentDocuments.value.find(d => d.id === id)
   if (doc) {
     editingDocumentId.value = id
-    editingDocument.value = { ...doc }
+    editingDocument.value = {...doc}
   }
 }
 

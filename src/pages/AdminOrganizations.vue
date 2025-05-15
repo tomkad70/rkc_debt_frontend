@@ -9,7 +9,7 @@
             <p class="text-gray-500 mt-1">Управление списком организаций</p>
           </div>
           <div class="mt-4 sm:mt-0 flex items-center">
-            <div class="bg-blue-50 rounded-lg p-3">
+            <div class="bg-blue-50 rounded-lg p-3 text-center w-full">
               <div class="font-medium text-sm text-blue-800">Всего организаций</div>
               <div class="text-2xl font-bold text-blue-600">{{ organizations.length }}</div>
             </div>

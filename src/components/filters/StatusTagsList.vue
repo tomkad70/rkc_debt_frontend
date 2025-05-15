@@ -1,34 +1,25 @@
 <template>
-  <div v-if="selected.length > 0" class="flex flex-wrap gap-2">
-    <div
-        v-for="value in selected"
-        :key="value"
-        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
-        :class="getStatusBadgeClass(value)"
-    >
-      {{ getStatusLabel(value) }}
-      <button
-          @click.stop="remove(value)"
-          class="ml-1 hover:opacity-70 cursor-pointer min-w-6 min-h-6 flex items-center justify-center"
-          aria-label="Удалить фильтр"
-          type="button"
-      >
-        ✕
-      </button>
-    </div>
-    <button
-        v-if="selected.length > 1"
-        @click.stop="removeAll"
-        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 cursor-pointer"
-        type="button"
-    >
-      Сбросить все
-    </button>
+  <div class="grid grid-cols-3 gap-1">
+  <Badge v-for="value in selected"
+         :key="value"
+         class="border-0 text-black h-6 m-0 w-full"
+         variant="outline"
+         :class="getStatusBadgeClass(value)">
+    Статус: {{ getStatusLabel(value) }}
+    <Button size="icon"
+            @click.stop="remove(value)"
+            class="cursor-pointer shadow-none w-2 h-2 m-0 p-0">
+      <SquareX class="text-red-500"/>
+    </Button>
+  </Badge>
   </div>
 </template>
 
 <script setup>
 import {computed} from 'vue'
+import {SquareX} from "lucide-vue-next";
+import {Button} from "@/components/ui/button/index.js";
+import {Badge} from "@/components/ui/badge/index.js";
 
 const props = defineProps({
   options: {

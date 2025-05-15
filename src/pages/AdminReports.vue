@@ -5,8 +5,8 @@
       <div class="mb-6 bg-white rounded-lg shadow-sm p-5">
         <div class="flex flex-col sm:flex-row justify-between">
           <div>
-            <h1 class="text-2xl font-bold text-gray-800">Договоры</h1>
-            <p class="text-gray-500 mt-1">Управление договорами с организациями</p>
+            <h1 class="text-2xl font-bold text-gray-800">Отчёты</h1>
+            <p class="text-gray-500 mt-1">Создание отчётов</p>
           </div>
           <div class="mt-4 sm:mt-0 flex  gap-3 text-center justify-between">
             <div class="bg-blue-50 rounded-lg p-3 w-full md:min-w-[200px]">
